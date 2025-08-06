@@ -161,8 +161,43 @@ def main():
         print(f"Procesando expresión: '{expr}'")
         print(f"{'='*50}")
         
+        # Tokenización
+        lexer.input(expr)
+        tokens = []
+        while True:
+            tok = lexer.token()
+            if not tok:
+                break
+            tokens.append((tok.type, tok.value))
+        
+        print("\n> 1. Tokenización:")
+        print("   ➡ Tokens generados:")
+        for i, token in enumerate(tokens, start=1):
+            print(f"      Token {i}: Tipo={token[0]}, Valor='{token[1]}'")
+        
         # Generar gráfico del AFN usando expresiones regulares
         generate_afn_with_regex(expr)
+        
+        # Análisis sintáctico
+        print("\n> 2. Análisis Sintáctico:")
+        try:
+            ast = parser.parse(expr)
+            print("   :) Expresión VALIDA")
+            
+            # Generar gráfico del árbol sintáctico
+            dot = generate_syntax_tree(ast)
+            filename = f"arbol_{expr.replace(' ', '_').replace('(', '').replace(')', '')}"
+            dot.render(filename, format='png', cleanup=True)
+            print(f"Árbol sintactico guardado como: {filename}.png")
+        except Exception as e:
+            print("   XXX Expresión INVALIDA")
+            print(f"   Error: {str(e)}")
+        
+        # Preguntar al usuario si desea continuar
+        user_input = input("\n¿Desea continuar con la siguiente expresión? (s/n): ").strip().lower()
+        if user_input == 'n':
+            print("Finalizando el programa.")
+            break
 
 if __name__ == '__main__':
     main()
