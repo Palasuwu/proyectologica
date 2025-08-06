@@ -2,21 +2,32 @@ import ply.lex as lex
 import ply.yacc as yacc
 from graphviz import Digraph
 
-# 1. Definición de tokens
+# 1. Definición de tokens y expresiones regulares
 tokens = (
     'VAR', 'CONST', 'NOT', 'AND', 'OR', 'IMPLIES', 'BICOND', 'LPAREN', 'RPAREN'
 )
 
-# 2. Expresiones regulares para tokens
-t_VAR = r'[p-z]'
-t_CONST = r'[01]'
-t_NOT = r'~'
-t_AND = r'\^'
-t_OR = r'o'
-t_IMPLIES = r'=>'
-t_BICOND = r'<=>'
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
+regex_map = {
+    'VAR': r'[p-z]',
+    'CONST': r'[01]',
+    'NOT': r'~',
+    'AND': r'\^',
+    'OR': r'o',
+    'IMPLIES': r'=>',
+    'BICOND': r'<=>',
+    'LPAREN': r'\(',
+    'RPAREN': r'\)'
+}
+
+t_VAR = regex_map['VAR']
+t_CONST = regex_map['CONST']
+t_NOT = regex_map['NOT']
+t_AND = regex_map['AND']
+t_OR = regex_map['OR']
+t_IMPLIES = regex_map['IMPLIES']
+t_BICOND = regex_map['BICOND']
+t_LPAREN = regex_map['LPAREN']
+t_RPAREN = regex_map['RPAREN']
 
 # 3. Ignorar espacios y tabulaciones
 t_ignore = ' \t'
@@ -99,24 +110,36 @@ def generate_syntax_tree(node, dot=None):
     
     return dot
 
-# 11. Función para generar gráfico del AFN
-def generate_afn(tokens, expr):
+# 11. Función para generar gráfico del AFN usando expresiones regulares
+def generate_afn_with_regex(expr):
     dot = Digraph()
     dot.attr('node', shape='circle')
     
     prev_state = "start"
     dot.node(prev_state, "start")
     
-    for i, token in enumerate(tokens):
+    for i, char in enumerate(expr):
         current_state = f"q{i}"
-        dot.node(current_state, token[1])
-        dot.edge(prev_state, current_state, label=token[0])
+        dot.node(current_state, char)
+        
+        # Determine the transition label based on the character
+        transition_label = None
+        for token, regex in regex_map.items():
+            if char in regex:
+                transition_label = regex
+                break
+        
+        if transition_label:
+            dot.edge(prev_state, current_state, label=transition_label)
+        else:
+            dot.edge(prev_state, current_state, label=char)
+        
         prev_state = current_state
     
     dot.node("accept", "accept")
     dot.edge(prev_state, "accept", label="ε")
     
-    filename = f"afn_{expr.replace(' ', '_').replace('(', '').replace(')', '')}"
+    filename = f"afn_regex_{expr.replace(' ', '_').replace('(', '').replace(')', '')}"
     dot.render(filename, format='png', cleanup=True)
     print(f"AFN guardado como: {filename}.png")
 
@@ -138,35 +161,8 @@ def main():
         print(f"Procesando expresión: '{expr}'")
         print(f"{'='*50}")
         
-        # Análisis léxico
-        lexer.input(expr)
-        tokens = []
-        while True:
-            tok = lexer.token()
-            if not tok:
-                break
-            tokens.append((tok.type, tok.value))
-        
-        print("\nTokens generados:")
-        for token in tokens:
-            print(f"  {token[0]}: {token[1]}")
-        
-        # Generar gráfico del AFN
-        generate_afn(tokens, expr)
-        
-        # Análisis sintáctico
-        try:
-            ast = parser.parse(expr)
-            print("\nExpresión VÁLIDA")
-            
-            # Generar gráfico del árbol sintáctico
-            dot = generate_syntax_tree(ast)
-            filename = f"arbol_{expr.replace(' ', '_').replace('(', '').replace(')', '')}"
-            dot.render(filename, format='png', cleanup=True)
-            print(f"Árbol sintáctico guardado como: {filename}.png")
-        except Exception as e:
-            print("\nExpresión INVÁLIDA")
-            print(f"Error: {str(e)}")
+        # Generar gráfico del AFN usando expresiones regulares
+        generate_afn_with_regex(expr)
 
 if __name__ == '__main__':
     main()
