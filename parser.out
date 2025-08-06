@@ -1,0 +1,335 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> formula
+Rule 1     formula -> VAR
+Rule 2     formula -> CONST
+Rule 3     formula -> NOT formula
+Rule 4     formula -> formula AND formula
+Rule 5     formula -> formula OR formula
+Rule 6     formula -> formula IMPLIES formula
+Rule 7     formula -> formula BICOND formula
+Rule 8     formula -> LPAREN formula RPAREN
+
+Terminals, with rules where they appear
+
+AND                  : 4
+BICOND               : 7
+CONST                : 2
+IMPLIES              : 6
+LPAREN               : 8
+NOT                  : 3
+OR                   : 5
+RPAREN               : 8
+VAR                  : 1
+error                : 
+
+Nonterminals, with rules where they appear
+
+formula              : 3 4 4 5 5 6 6 7 7 8 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . formula
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 1
+
+state 1
+
+    (0) S' -> formula .
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+    IMPLIES         shift and go to state 8
+    BICOND          shift and go to state 9
+
+
+state 2
+
+    (1) formula -> VAR .
+
+    AND             reduce using rule 1 (formula -> VAR .)
+    OR              reduce using rule 1 (formula -> VAR .)
+    IMPLIES         reduce using rule 1 (formula -> VAR .)
+    BICOND          reduce using rule 1 (formula -> VAR .)
+    $end            reduce using rule 1 (formula -> VAR .)
+    RPAREN          reduce using rule 1 (formula -> VAR .)
+
+
+state 3
+
+    (2) formula -> CONST .
+
+    AND             reduce using rule 2 (formula -> CONST .)
+    OR              reduce using rule 2 (formula -> CONST .)
+    IMPLIES         reduce using rule 2 (formula -> CONST .)
+    BICOND          reduce using rule 2 (formula -> CONST .)
+    $end            reduce using rule 2 (formula -> CONST .)
+    RPAREN          reduce using rule 2 (formula -> CONST .)
+
+
+state 4
+
+    (3) formula -> NOT . formula
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 10
+
+state 5
+
+    (8) formula -> LPAREN . formula RPAREN
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 11
+
+state 6
+
+    (4) formula -> formula AND . formula
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 12
+
+state 7
+
+    (5) formula -> formula OR . formula
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 13
+
+state 8
+
+    (6) formula -> formula IMPLIES . formula
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 14
+
+state 9
+
+    (7) formula -> formula BICOND . formula
+    (1) formula -> . VAR
+    (2) formula -> . CONST
+    (3) formula -> . NOT formula
+    (4) formula -> . formula AND formula
+    (5) formula -> . formula OR formula
+    (6) formula -> . formula IMPLIES formula
+    (7) formula -> . formula BICOND formula
+    (8) formula -> . LPAREN formula RPAREN
+
+    VAR             shift and go to state 2
+    CONST           shift and go to state 3
+    NOT             shift and go to state 4
+    LPAREN          shift and go to state 5
+
+    formula                        shift and go to state 15
+
+state 10
+
+    (3) formula -> NOT formula .
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    AND             reduce using rule 3 (formula -> NOT formula .)
+    OR              reduce using rule 3 (formula -> NOT formula .)
+    IMPLIES         reduce using rule 3 (formula -> NOT formula .)
+    BICOND          reduce using rule 3 (formula -> NOT formula .)
+    $end            reduce using rule 3 (formula -> NOT formula .)
+    RPAREN          reduce using rule 3 (formula -> NOT formula .)
+
+  ! AND             [ shift and go to state 6 ]
+  ! OR              [ shift and go to state 7 ]
+  ! IMPLIES         [ shift and go to state 8 ]
+  ! BICOND          [ shift and go to state 9 ]
+
+
+state 11
+
+    (8) formula -> LPAREN formula . RPAREN
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    RPAREN          shift and go to state 16
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+    IMPLIES         shift and go to state 8
+    BICOND          shift and go to state 9
+
+
+state 12
+
+    (4) formula -> formula AND formula .
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    AND             reduce using rule 4 (formula -> formula AND formula .)
+    OR              reduce using rule 4 (formula -> formula AND formula .)
+    IMPLIES         reduce using rule 4 (formula -> formula AND formula .)
+    BICOND          reduce using rule 4 (formula -> formula AND formula .)
+    $end            reduce using rule 4 (formula -> formula AND formula .)
+    RPAREN          reduce using rule 4 (formula -> formula AND formula .)
+
+  ! AND             [ shift and go to state 6 ]
+  ! OR              [ shift and go to state 7 ]
+  ! IMPLIES         [ shift and go to state 8 ]
+  ! BICOND          [ shift and go to state 9 ]
+
+
+state 13
+
+    (5) formula -> formula OR formula .
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    OR              reduce using rule 5 (formula -> formula OR formula .)
+    IMPLIES         reduce using rule 5 (formula -> formula OR formula .)
+    BICOND          reduce using rule 5 (formula -> formula OR formula .)
+    $end            reduce using rule 5 (formula -> formula OR formula .)
+    RPAREN          reduce using rule 5 (formula -> formula OR formula .)
+    AND             shift and go to state 6
+
+  ! AND             [ reduce using rule 5 (formula -> formula OR formula .) ]
+  ! OR              [ shift and go to state 7 ]
+  ! IMPLIES         [ shift and go to state 8 ]
+  ! BICOND          [ shift and go to state 9 ]
+
+
+state 14
+
+    (6) formula -> formula IMPLIES formula .
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    IMPLIES         reduce using rule 6 (formula -> formula IMPLIES formula .)
+    BICOND          reduce using rule 6 (formula -> formula IMPLIES formula .)
+    $end            reduce using rule 6 (formula -> formula IMPLIES formula .)
+    RPAREN          reduce using rule 6 (formula -> formula IMPLIES formula .)
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+
+  ! AND             [ reduce using rule 6 (formula -> formula IMPLIES formula .) ]
+  ! OR              [ reduce using rule 6 (formula -> formula IMPLIES formula .) ]
+  ! IMPLIES         [ shift and go to state 8 ]
+  ! BICOND          [ shift and go to state 9 ]
+
+
+state 15
+
+    (7) formula -> formula BICOND formula .
+    (4) formula -> formula . AND formula
+    (5) formula -> formula . OR formula
+    (6) formula -> formula . IMPLIES formula
+    (7) formula -> formula . BICOND formula
+
+    BICOND          reduce using rule 7 (formula -> formula BICOND formula .)
+    $end            reduce using rule 7 (formula -> formula BICOND formula .)
+    RPAREN          reduce using rule 7 (formula -> formula BICOND formula .)
+    AND             shift and go to state 6
+    OR              shift and go to state 7
+    IMPLIES         shift and go to state 8
+
+  ! AND             [ reduce using rule 7 (formula -> formula BICOND formula .) ]
+  ! OR              [ reduce using rule 7 (formula -> formula BICOND formula .) ]
+  ! IMPLIES         [ reduce using rule 7 (formula -> formula BICOND formula .) ]
+  ! BICOND          [ shift and go to state 9 ]
+
+
+state 16
+
+    (8) formula -> LPAREN formula RPAREN .
+
+    AND             reduce using rule 8 (formula -> LPAREN formula RPAREN .)
+    OR              reduce using rule 8 (formula -> LPAREN formula RPAREN .)
+    IMPLIES         reduce using rule 8 (formula -> LPAREN formula RPAREN .)
+    BICOND          reduce using rule 8 (formula -> LPAREN formula RPAREN .)
+    $end            reduce using rule 8 (formula -> LPAREN formula RPAREN .)
+    RPAREN          reduce using rule 8 (formula -> LPAREN formula RPAREN .)
+
