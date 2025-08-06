@@ -7,12 +7,13 @@ Existen DOS versiones de este Proyecto:
 Es importante tomar esto en cuenta a la hora de correr el archivo correspondiente.
 Se procesan las siguientes expresiones:
 - p
-- ~~~p
+- ~ ~ ~p
 - (p^q)
 - (0=>(ros))
 - ~(p^q)
 - (p<=>~p)
 - ((p=>q)^p)
 - (~(p^(qor))os)
+
 
 Para cada una se puede observar lo siguiente: Análisis Sintáctico, Tokenización, creación de árbol y AFN de su respectiva expresión.
