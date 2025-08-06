@@ -2,23 +2,25 @@ import ply.lex as lex
 import ply.yacc as yacc
 from graphviz import Digraph
 
-# 1. Definición de tokens y expresiones regulares
+# Definicion de tokens y expresiones regulares
 tokens = (
     'VAR', 'CONST', 'NOT', 'AND', 'OR', 'IMPLIES', 'BICOND', 'LPAREN', 'RPAREN'
 )
 
+# Mapeo de tokens a sus expresiones regulares
 regex_map = {
-    'VAR': r'[p-z]',
-    'CONST': r'[01]',
-    'NOT': r'~',
-    'AND': r'\^',
-    'OR': r'o',
-    'IMPLIES': r'=>',
-    'BICOND': r'<=>',
-    'LPAREN': r'\(',
-    'RPAREN': r'\)'
+    'VAR': r'[p-z]',       # Variables proposicionales
+    'CONST': r'[01]',      # Constantes (0 y 1)
+    'NOT': r'~',           # Operador de negacion
+    'AND': r'\^',          # Operador AND
+    'OR': r'o',            # Operador OR
+    'IMPLIES': r'=>',      # Operador implica
+    'BICOND': r'<=>',      # Operador bicondicional
+    'LPAREN': r'\(',       # Parentesis izquierdo
+    'RPAREN': r'\)'        # Parentesis derecho
 }
 
+# Asignacion de expresiones regulares a los tokens
 t_VAR = regex_map['VAR']
 t_CONST = regex_map['CONST']
 t_NOT = regex_map['NOT']
@@ -29,18 +31,18 @@ t_BICOND = regex_map['BICOND']
 t_LPAREN = regex_map['LPAREN']
 t_RPAREN = regex_map['RPAREN']
 
-# 3. Ignorar espacios y tabulaciones
+# Ignorar espacios y tabulaciones
 t_ignore = ' \t'
 
-# 4. Manejo de errores léxicos
+# Manejo de errores lexicos
 def t_error(t):
-    print(f"Carácter ilegal '{t.value[0]}'")
+    print(f"Caracter ilegal '{t.value[0]}'")
     t.lexer.skip(1)
 
-# 5. Construcción del lexer
+# Construccion del lexer
 lexer = lex.lex()
 
-# 6. Precedencia de operadores
+# Precedencia de operadores
 precedence = (
     ('left', 'BICOND'),
     ('left', 'IMPLIES'),
@@ -49,7 +51,7 @@ precedence = (
     ('right', 'NOT'),
 )
 
-# 7. Clase para nodos del árbol sintáctico
+# Clase para nodos del arbol sintactico
 class Node:
     def __init__(self, type, value=None, children=None):
         self.type = type
@@ -58,7 +60,7 @@ class Node:
             children = []
         self.children = children
 
-# 8. Reglas de la gramática
+# Reglas de la gramatica
 def p_formula_var(p):
     'formula : VAR'
     p[0] = Node('VAR', p[1])
@@ -88,10 +90,10 @@ def p_error(p):
     else:
         print("Error de sintaxis al final de la entrada")
 
-# 9. Construcción del parser
+# Construccion del parser
 parser = yacc.yacc()
 
-# 10. Función para generar gráfico del árbol sintáctico
+# Funcion para generar el grafico del arbol sintactico
 def generate_syntax_tree(node, dot=None):
     if dot is None:
         dot = Digraph()
@@ -110,7 +112,7 @@ def generate_syntax_tree(node, dot=None):
     
     return dot
 
-# 11. Función para generar gráfico del AFN usando expresiones regulares
+# Funcion para generar el grafico del AFN usando expresiones regulares
 def generate_afn_with_regex(expr):
     dot = Digraph()
     dot.attr('node', shape='circle')
@@ -122,7 +124,7 @@ def generate_afn_with_regex(expr):
         current_state = f"q{i}"
         dot.node(current_state, char)
         
-        # Determine the transition label based on the character
+        # Determinar la etiqueta de transicion basada en el caracter
         transition_label = None
         for token, regex in regex_map.items():
             if char in regex:
@@ -143,8 +145,9 @@ def generate_afn_with_regex(expr):
     dot.render(filename, format='png', cleanup=True)
     print(f"AFN guardado como: {filename}.png")
 
-# 12. Función principal
+# Funcion principal
 def main():
+    # Lista de expresiones a procesar
     expressions = [
         "p",
         "~q",
@@ -158,10 +161,10 @@ def main():
     
     for expr in expressions:
         print(f"\n{'='*50}")
-        print(f"Procesando expresión: '{expr}'")
+        print(f"Procesando expresion: '{expr}'")
         print(f"{'='*50}")
         
-        # Tokenización
+        # Tokenizacion
         lexer.input(expr)
         tokens = []
         while True:
@@ -170,31 +173,31 @@ def main():
                 break
             tokens.append((tok.type, tok.value))
         
-        print("\n> 1. Tokenización:")
+        print("\n> 1. Tokenizacion:")
         print("   ➡ Tokens generados:")
         for i, token in enumerate(tokens, start=1):
             print(f"      Token {i}: Tipo={token[0]}, Valor='{token[1]}'")
         
-        # Generar gráfico del AFN usando expresiones regulares
+        # Generar grafico del AFN usando expresiones regulares
         generate_afn_with_regex(expr)
         
-        # Análisis sintáctico
-        print("\n> 2. Análisis Sintáctico:")
+        # Analisis sintactico
+        print("\n> 2. Analisis Sintactico:")
         try:
             ast = parser.parse(expr)
-            print("   :) Expresión VALIDA")
+            print("   :) Expresion VALIDA")
             
-            # Generar gráfico del árbol sintáctico
+            # Generar grafico del arbol sintactico
             dot = generate_syntax_tree(ast)
             filename = f"arbol_{expr.replace(' ', '_').replace('(', '').replace(')', '')}"
             dot.render(filename, format='png', cleanup=True)
-            print(f"Árbol sintactico guardado como: {filename}.png")
+            print(f"Arbol sintactico guardado como: {filename}.png")
         except Exception as e:
-            print("   XXX Expresión INVALIDA")
+            print("   XXX Expresion INVALIDA")
             print(f"   Error: {str(e)}")
         
         # Preguntar al usuario si desea continuar
-        user_input = input("\n¿Desea continuar con la siguiente expresión? (s/n): ").strip().lower()
+        user_input = input("\n¿Desea continuar con la siguiente expresion? (s/n): ").strip().lower()
         if user_input == 'n':
             print("Finalizando el programa.")
             break
